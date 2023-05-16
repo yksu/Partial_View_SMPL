@@ -1,0 +1,9 @@
+name: Partial_View
+
+dependencies:
+  - opencv-python
+  - python=python3.8
+  - matplotlib
+  - numpy
+  - torch
+  - pip
