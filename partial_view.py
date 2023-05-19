@@ -161,10 +161,7 @@ class Partial_views:
 		''' 
     	Set the the parameter of the camera
     
-    	Args:
-    	    pose_axisang (torch): (batch_size,72) 
-    	    betas (torch): (batch_size,300) 
-    	'''	
+		'''	
 		self.image_size_height = 576
 		self.image_size_width = 640
 		self.image_size = torch.tensor([self.image_size_height, self.image_size_width]).unsqueeze(0).cpu()
