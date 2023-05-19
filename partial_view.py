@@ -19,6 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class Partial_views:
+	
 	def __init__(self, pose_axisang, betas):
 		self.setSMPL()
 		self.setTestSMPL(pose_axisang,betas)
@@ -29,9 +30,19 @@ class Partial_views:
 		
 	
 	def setSMPL(self):
+		''' 
+    	Set the SMPL object from models by default use the male object
+    	'''	
 		self.smpl = util.SMPL_path(gender="M").get_smpl()
 
 	def setTestSMPL(self,pose_axisang,betas):
+		''' 
+    	Set the SMPL object
+    
+    	Args:
+    	    pose_axisang (torch): (batch_size,72) 
+    	    betas (torch): (batch_size,300) 
+    	'''	
 		test_smpl = SMPL_Layer(model_root="./models")
 		test_vert = test_smpl.smpl_data["v_posed"]
 		
@@ -45,14 +56,21 @@ class Partial_views:
 
 
 	def setMesh(self,mesh_vert=None):
-		# 6890 vertices, 13776 faces
-		if mesh_vert==None:
+		''' 
 
-			self.mesh     = Meshes(self.vertices, self.ref_faces)
-		else:
-			self.mesh     = Meshes(mesh_vert, self.ref_faces)
+    	Set the Mesh object
+    
+    	'''	
+		# 6890 vertices, 13776 faces
+
+		self.mesh     = Meshes(self.vertices, self.ref_faces)
+
 
 	def setRefMesh(self):
+		''' 
+    	Set the Mesh object for reference
+	    
+    	'''	
 		self.ref_faces    = self.smpl.faces.astype('float32')
 		self.ref_vertices = self.smpl.shapedirs
 		self.ref_faces	  = torch.from_numpy(self.ref_faces).float().cpu()[None,:]
@@ -60,14 +78,28 @@ class Partial_views:
 		self.mesh_ref = Meshes(self.ref_vertices, self.ref_faces)
 
 	def setFaceLocationMesh(self):
+		''' 
+    	Set the face location of the Mesh object
+    
+    	
+    	'''	
 		self.face_location_attr_scan        =    self.mesh.verts_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
 		self.face_location_attr_scan_normal =    self.mesh.verts_normals_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
 		
 	def setFaceLocationRefMesh(self):
+		''' 
+    	Set the face location of the reference Mesh object
+     
+    	'''	
 		self.face_location_attr_ref        = self.mesh_ref.verts_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
 		self.face_location_attr_ref_normal = self.mesh_ref.verts_normals_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
 	
 	def show_image(self):
+		''' 
+    	Show the 2D depth map and save the image
+    
+    	
+    	'''	
 		self.depth_map()
 
 		depth = self.depth
@@ -126,6 +158,13 @@ class Partial_views:
 
 
 	def set_Camera(self):
+		''' 
+    	Set the the parameter of the camera
+    
+    	Args:
+    	    pose_axisang (torch): (batch_size,72) 
+    	    betas (torch): (batch_size,300) 
+    	'''	
 		self.image_size_height = 576
 		self.image_size_width = 640
 		self.image_size = torch.tensor([self.image_size_height, self.image_size_width]).unsqueeze(0).cpu()
@@ -168,7 +207,10 @@ class Partial_views:
 		self.pixel_normal_ref = interpolate_face_attributes  (self.pix_to_face, self.barycentric, self.face_location_attr_ref_normal)
 
 	def recover3D(self):
-
+		''' 
+    	Recover the partial view from the 2D depth map
+	    
+    	'''	
 		#pixel_vals: tensor of shape (N, H, W, K, D) giving the interpolated value of the face attribute for each pixel.
 		self.setPixelScan()
 		self.setPixelRef()
