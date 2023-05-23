@@ -18,3 +18,89 @@ class SMPL_path:
 	def get_smpl(self):
 		#print(self)
 		return self.smpl
+
+import torch
+from pytorch3d.renderer import PerspectiveCameras
+from pytorch3d.renderer import RasterizationSettings
+from pytorch3d.renderer import MeshRasterizer
+
+def set_Camera_Rasterizer(H,W,R,T,K):
+	''' 
+    Set the the parameter of the camera
+    Args:
+		H (int) : image height
+		W (int) : image width
+    	R (np.ndarray): (3,) array storing the rotation angle
+    	T (np.ndarray): (3,) array storing the translation vector
+    	K (np.ndarray): (4,) array storing the camaera calibration matrix
+	
+	returns:
+		cameras_front
+	'''
+	if H == None:	
+		image_size_height = 576
+	else:
+		image_size_height = H
+	
+	if W == None:
+		image_size_width = 640
+	else:
+		image_size_width = W
+
+	image_size = torch.tensor(
+		[image_size_height, image_size_width]
+		).unsqueeze(0).cpu()
+	
+	if R == None:
+		R = torch.tensor([[
+				[-1.,  0.,  0.],
+				[ 0.,  1.,  0.],
+				[ 0.,  0., -1.]
+				]]).cpu()
+	else:
+		r = Rotation.from_euler('zyx', R, degrees=True)
+		R = r.as_matrix()
+	if T == None:
+		T = torch.tensor([[-0.0000, 0.2, 2.7000]]).cpu()
+	else:
+		T = T
+		# BEHAVE: Kinect azure depth camera 0 parameters
+	if K == None:
+		K = [502.9671325683594,503.04168701171875,322.229736328125,329.3377685546875]
+		fx = K[0]
+		fy = K[1]
+		cx = K[2]
+		cy = K[3]
+		K = torch.tensor([[
+						[fx, 0.0, cx, 0.0],
+						[0.0, fy, cy, 0.0],
+						[0.0, 0.0, 0.0, 1.0],
+						[0.0, 0.0, 1.0, 0.0]]]).cpu()
+	else:		
+		fx = K[0]
+		fy = K[1]
+		cx = K[2]
+		cy = K[3]
+		K = torch.tensor([[
+						[fx, 0.0, cx, 0.0],
+						[0.0, fy, cy, 0.0],
+						[0.0, 0.0, 0.0, 1.0],
+						[0.0, 0.0, 1.0, 0.0]]]).cpu()
+
+	cameras_front = PerspectiveCameras(
+		R=R, T=T, 
+		in_ndc=False, 
+		K=K, 
+		image_size=image_size).cpu()
+	
+	raster_settings_kinect = RasterizationSettings(
+			image_size=(image_size_height, image_size_width),
+			blur_radius=0,
+			faces_per_pixel=1,  # number of faces to save per pixel
+			bin_size=0
+			)
+	rasterizer = MeshRasterizer(
+			cameras=cameras_front, 
+			raster_settings=raster_settings_kinect
+			)
+	return rasterizer 
