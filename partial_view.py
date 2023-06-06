@@ -22,7 +22,7 @@ class Partial_views:
 	### Part 1 initialization
 	def __init__(self, pose_axisang=None, betas=None):
 		self.setRef(gender="M")
-		self.setMesh(pose_axisang=pose_axisang,betas=betas)
+		self.setSMPL(pose_axisang=pose_axisang,betas=betas)
 
 		### Set face location for mesh and ref_mesh
 		self.face_location_attr_scan        =    self.mesh.verts_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
