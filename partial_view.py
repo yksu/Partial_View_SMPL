@@ -20,7 +20,14 @@ warnings.filterwarnings('ignore')
 
 class Partial_views:
 	### Part 1 initialization
-	def __init__(self, pose_axisang=None, betas=None):
+	def __init__(self, pose_axisang=None, betas=None,camera=None):
+		''' 
+		Initializing
+		Args:
+			pose_axisang (torch): (batch_size,72) 
+			betas (torch): (batch_size,300) 
+			camera (dict)
+		'''	
 		self.setRef(gender="M")
 		self.setSMPL(pose_axisang=pose_axisang,betas=betas)
 
@@ -29,7 +36,8 @@ class Partial_views:
 		self.face_location_attr_scan_normal =    self.mesh.verts_normals_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
 		self.face_location_attr_ref        = self.mesh_ref.verts_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
 		self.face_location_attr_ref_normal = self.mesh_ref.verts_normals_packed()[self.mesh.faces_packed()].reshape((13776, 3,-1))
-	
+		
+		self.camera=camera
 	def setRef(self,gender="M"):
 		''' 
 		Set the reference SMPL object and the reference Mesh object.
@@ -85,7 +93,8 @@ class Partial_views:
     	Show the 2D depth map and save the image
     
     	'''	
-		self.setDepth_map(H=None,W=None,R=None,T=None,K=None)
+		self.setCamera()
+		self.setDepth_map(H=self.H,W=self.W,R=self.R,T=self.T,K=self.K)
 
 		depth = self.depth
 		plt.imshow(self.depth[0, :,:, 0].cpu().numpy())
@@ -97,6 +106,35 @@ class Partial_views:
 
 		# get partial pointcloud from rendering results
 		# get correct order in data
+	
+	def setCamera():
+		if self.camera == None:
+			return
+		keys = camera.keys()
+		if "H" in keys:
+			self.H = camera['H']
+		else:
+			self.H = None
+
+		if "W" in keys:
+			self.W = camera['W']
+		else:
+			self.W = None	
+
+		if "R" in keys:
+			self.R = camera['R']
+		else:
+			self.R = None	
+		
+		if "T" in keys:
+			self.T = camera['T']
+		else:
+			self.T = None
+
+		if "K" in keys:
+			self.K = camera['K']
+		else:
+			self.K = None	
 
 	def setDepth_map(self,H=None,W=None,R=None,T=None,K=None):
 		
