@@ -29,9 +29,10 @@ if __name__ == '__main__':
 	n_sample = d_poses.shape[0]
 	
 	####### In the demo file, I save and show 3 images for illustration.
-	os.mkdir("result")
+	folder = "result"
+	os.mkdir(folder)
 	for i in range(0,min(n_sample,30),10):
 		pose = d_poses[i].reshape(1,-1)
 		pv = Partial_views(pose_axisang=pose,betas=None,camera=camera)
-		pv.run("result","image"+str(i+1))
+		pv.run(folder,"image"+str(i+1))
 		pv.show_3D_Partial_View()
