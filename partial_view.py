@@ -88,7 +88,7 @@ class Partial_views:
 		self.mesh       = Meshes(self.vertices, self.ref_faces)	
 
 	### Part 2: depth map creating and 2D image showing
-	def show_image(self,show=True,save=False):
+	def show_image(self,folder,filename,show=True,save=True):
 		''' 
     	Show the 2D depth map and save the image
     
@@ -101,45 +101,48 @@ class Partial_views:
 		if show:
 			plt.show()
 		if save:
-			plt.savefig('2D_object.png')
+			if folder == None:
+				plt.savefig('output/'+filename)
+			else:
+				plt.savefig(folder+"/"+filename)	
 		plt.close()
 
 		# get partial pointcloud from rendering results
 		# get correct order in data
 	
-	def setCamera():
+	def setCamera(self):
 		if self.camera == None:
 			return
-		keys = camera.keys()
+		keys = self.camera.keys()
 		if "H" in keys:
-			self.H = camera['H']
+			self.H = self.camera['H']
 		else:
 			self.H = None
 
 		if "W" in keys:
-			self.W = camera['W']
+			self.W = self.camera['W']
 		else:
 			self.W = None	
 
 		if "R" in keys:
-			self.R = camera['R']
+			self.R = self.camera['R']
 		else:
 			self.R = None	
 		
 		if "T" in keys:
-			self.T = camera['T']
+			self.T = self.camera['T']
 		else:
 			self.T = None
 
 		if "K" in keys:
-			self.K = camera['K']
+			self.K = self.camera['K']
 		else:
 			self.K = None	
 
 	def setDepth_map(self,H=None,W=None,R=None,T=None,K=None):
 		
 		self.rasterizer = set_Camera_Rasterizer(H,W,R,T,K)
-
+		
 		fragments = self.rasterizer(self.mesh)
 
 		self.depth = fragments.zbuf
@@ -182,3 +185,9 @@ class Partial_views:
 		
 	def show_3D_Partial_View(self):
 		o3d.visualization.draw_geometries([self.pcd])
+
+### For simplicity, this method would run
+	def run(self,folder,filename):
+		self.show_image(show=False, save=True,folder=folder,filename=filename)
+		self.recover3D()
+		
