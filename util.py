@@ -1,5 +1,6 @@
 import numpy as np 
 import smplx
+from scipy.spatial.transform import Rotation as Rotation
 class SMPL_path:
 	def __init__(self,gender=None):
 		self.gender = gender
@@ -30,7 +31,7 @@ def set_Camera_Rasterizer(H,W,R,T,K):
     Args:
 		H (int) : image height
 		W (int) : image width
-    	R (torch.Tensor): (3,) array storing the rotation angle
+    	R (np.array): (3,) array storing the rotation angle
     	T (torch.Tensor): (3,) array storing the translation vector
     	K (torch.Tensor): (4,) array storing the camaera calibration matrix
 	
@@ -51,15 +52,30 @@ def set_Camera_Rasterizer(H,W,R,T,K):
 		[image_size_height, image_size_width]
 		).unsqueeze(0).cpu()
 	
-	if R == None:
-		R = torch.tensor([[
+	try:
+		if R.any() != None:
+			r = Rotation.from_euler('zyx', R, degrees=True)
+			R = r.as_matrix()
+			R = torch.tensor(R).reshape(1,3,3)
+			
+		else:
+			R = torch.tensor([[
 				[-1.,  0.,  0.],
 				[ 0.,  1.,  0.],
 				[ 0.,  0., -1.]
 				]]).cpu()
-	else:
-		r = Rotation.from_euler('zyx', R, degrees=True)
-		R = r.as_matrix()
+	except:
+		if R == None:
+			R = torch.tensor([[
+				[-1.,  0.,  0.],
+				[ 0.,  1.,  0.],
+				[ 0.,  0., -1.]
+				]]).cpu()
+
+		else:
+			r = Rotation.from_euler('zyx', R, degrees=True)
+			R = r.as_matrix()
+			R = torch.tensor(R).reshape(1,3,3)
 	if T == None:
 		T = torch.tensor([[-0.0000, 0.2, 2.7000]]).cpu()
 	else:
