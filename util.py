@@ -30,9 +30,9 @@ def set_Camera_Rasterizer(H,W,R,T,K):
     Args:
 		H (int) : image height
 		W (int) : image width
-    	R (np.ndarray): (3,) array storing the rotation angle
-    	T (np.ndarray): (3,) array storing the translation vector
-    	K (np.ndarray): (4,) array storing the camaera calibration matrix
+    	R (torch.Tensor): (3,) array storing the rotation angle
+    	T (torch.Tensor): (3,) array storing the translation vector
+    	K (torch.Tensor): (4,) array storing the camaera calibration matrix
 	
 	returns:
 		cameras_front
