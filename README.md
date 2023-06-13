@@ -5,11 +5,16 @@ This repository contains the code for ...
 
 ## Install
 
-To install the dependencies, you can use the following command ...
+Install the following packages: 
 
-You also need these models that you can download from ...
+  - human body prior from https://github.com/nghorbani/human_body_prior
 
-Data can be download at this link ...
+  - body_visualizer from https://github.com/nghorbani/body_visualizer
+
+Set the environment:
+
+ - update in the existing environment conda env update -f environment.yml in an existing environment, or
+ - create a new environment "Partial_View" conda env create -f environment.yml, for a new smplpytorch environment
 
 ## Tutorial
 
