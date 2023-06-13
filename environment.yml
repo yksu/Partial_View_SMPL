@@ -7,3 +7,25 @@ dependencies:
   - numpy
   - torch
   - pip
+  - PyOpenGL=3.1.0
+  - PyOpenGL-accelerate=3.1.7
+  - pyrender=0.1.45
+  - trimesh
+  - chumpy
+  - open3d
+  - pytorch3d
+  - scipy
+  - smplpytorch                   
+  - smplx                         
+  - sympy                        
+  - tqdm
+  - PyYAML
+  - transforms3d==0.3.1
+  - omegaconf
+  - loguru
+  - dotmap
+  - colour
+  - scipy
+  - scikit-image
+  - imageio
+  - moviepy
