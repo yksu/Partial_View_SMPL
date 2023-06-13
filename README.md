@@ -8,6 +8,7 @@ This repository contains the code for ...
 Set the environment:
 
  - update in the existing environment conda env update -f environment.yml in an existing environment, or
+
  - create a new environment "Partial_View" conda env create -f environment.yml, for a new smplpytorch environment
 
 Install the following packages: 
