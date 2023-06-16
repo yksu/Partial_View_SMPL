@@ -30,13 +30,13 @@ The demo file will show three shapes as an illustration.
 
 ### Changing the view
 
-In the #file demo_translation.py, 
+In the file **demo_translation.py**, 
 
 it is an illustration showing that the object moving along the x-axis, y-axis and z-axis for 10 time steps and for 10 shapes respectively.
 
 So, for each moving direction, we show 100 shapes.
 
-In the # file demo_rotation.py, 
+In the file **demo_rotation.py**, 
 
 it is an illustration showing that the object rotating along the x-axis, y-axis and z-axis for 10 time steps and for 10 shapes respectively.
 
