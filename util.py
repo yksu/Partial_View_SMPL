@@ -54,7 +54,7 @@ def set_Camera_Rasterizer(H,W,R,T,K):
 	
 	try:
 		if R.any() != None:
-			r = Rotation.from_euler('zyx', R, degrees=True)
+			r = Rotation.from_euler('xyz', R, degrees=True)
 			R = r.as_matrix()
 			R = torch.tensor(R).reshape(1,3,3)
 			
@@ -73,7 +73,7 @@ def set_Camera_Rasterizer(H,W,R,T,K):
 				]]).cpu()
 
 		else:
-			r = Rotation.from_euler('zyx', R, degrees=True)
+			r = Rotation.from_euler('xyz', R, degrees=True)
 			R = r.as_matrix()
 			R = torch.tensor(R).reshape(1,3,3)
 	if T == None:
