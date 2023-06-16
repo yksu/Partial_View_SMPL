@@ -25,10 +25,11 @@ if __name__ == '__main__':
 	relevant_poses = d['poses']
 
 	d_poses = torch.tensor(d['poses'][:,:72],dtype=torch.float32) 
-	
+
+	# number of sample, which is 608
 	n_sample = d_poses.shape[0]
 	
-	####### In the demo file, I save and show 3 images for illustration.
+	####### In the demo file, we create and show 3 images for illustration.
 	folder = "result"
 	os.mkdir(folder)
 	for i in range(0,min(n_sample,30),10):
