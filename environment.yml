@@ -17,7 +17,6 @@ dependencies:
   - imageio
   - python=3.8
 
-
   - pip:
     - opencv-python
     - pyrender==0.1.45
