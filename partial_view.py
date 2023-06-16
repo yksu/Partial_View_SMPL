@@ -85,34 +85,50 @@ class Partial_views:
 			betas (torch): (batch_size,300) 
 		'''	
 		self.vertices,_ = self.test_smpl(pose_axisang,betas)
-		self.mesh       = Meshes(self.vertices, self.ref_faces)	
-
-	### Part 2: depth map creating and 2D image showing
-	def show_image(self,folder,filename,show=True,save=True):
-		''' 
-    	Show the 2D depth map and save the image
-    
-    	'''	
-		self.setCamera()
-		self.setDepth_map(H=self.H,W=self.W,R=self.R,T=self.T,K=self.K)
-
-		depth = self.depth
-		plt.imshow(self.depth[0, :,:, 0].cpu().numpy())
-		if show:
-			plt.show()
-		if save:
-			if folder == None:
-				plt.savefig('output/'+filename)
-			else:
-				plt.savefig(folder+"/"+filename)	
-		plt.close()
-
-		# get partial pointcloud from rendering results
-		# get correct order in data
-	
+		self.mesh       = Meshes(self.vertices, self.ref_faces)
+		
 	def setCamera(self):
+		''' 
+		setCamera : set the camera parameter (H , W , T , R , K) from the attributes self.camera
+		'''
+		
 		if self.camera == None:
 			return
+		keys = self.camera.keys()
+		if "H" in keys:
+			self.H = self.camera['H']
+		else:
+			self.H = None
+
+		if "W" in keys:
+			self.W = self.camera['W']
+		else:
+			self.W = None	
+
+		
+		if "T" in keys:
+			self.T = self.camera['T']
+		else:
+			self.T = None
+		
+		if "R" in keys:
+			self.R = self.camera['R']
+		else:
+			self.R = None	
+		
+		if "K" in keys:
+			self.K = self.camera['K']
+		else:
+			self.K = None	
+
+	### Part 2: depth map creating and 2D image showing
+	def updateCamera(self,camera):
+		''' 
+		updateCamera : set the camera parameter (H , W , T , R , K) from the the arguement camera
+
+    		Args:
+      			camera (dict) : with keys  ["H" , "W" , "T" , "R" , "K"]
+		'''
 		keys = self.camera.keys()
 		if "H" in keys:
 			self.H = self.camera['H']
@@ -137,9 +153,47 @@ class Partial_views:
 		if "K" in keys:
 			self.K = self.camera['K']
 		else:
-			self.K = None	
+			self.K = None		
+	
+	def show_image(self,folder,filename,show=True,save=True):
+		''' 
+    		Show the 2D depth map and save the image
+      		Args:
+      			folder (str) : folder name
+	 		filename(str): filename
+    			show=True(bool): decide whether to show the 2D depth map
+       			show=True(bool): decide whether to save the 2D depth map
+    
+    		'''	
+		#self.setCamera()
+		#self.setDepth_map(H=self.H,W=self.W,R=self.R,T=self.T,K=self.K)
 
+		depth = self.depth
+		plt.imshow(self.depth[0, :,:, 0].cpu().numpy())
+		if show:
+			plt.show()
+		if save:
+			if folder == None:
+				plt.savefig('output/'+filename)
+			else:
+				plt.savefig(folder+"/"+filename)	
+		plt.close()
+
+		# get partial pointcloud from rendering results
+		# get correct order in data
+	
+	
 	def setDepth_map(self,H=None,W=None,R=None,T=None,K=None):
+		'''  
+    		Create the depth map
+    		Args:
+			H (int) : image height
+			W (int) : image width
+    			R (np.array): (3,) array storing the rotation angle
+    			T (torch.Tensor): (3,) array storing the translation vector
+    			K (torch.Tensor): (4,) array storing the camaera calibration matrix
+		
+    		'''	
 		
 		self.rasterizer = set_Camera_Rasterizer(H,W,R,T,K)
 		
@@ -149,14 +203,13 @@ class Partial_views:
 		self.pix_to_face = fragments.pix_to_face
 		self.barycentric = fragments.bary_coords
 
-
 		
 	### Part 3: recover 3D partial view from the 2D depth map
 	def recover3D(self):
 		''' 
-    	Recover the partial view from the 2D depth map
+    		Recover the partial view from the 2D depth map
 	    
-    	'''	
+    		'''	
 		#pixel_vals: tensor of shape (N, H, W, K, D) giving the interpolated value of the face attribute for each pixel.
 		self.pixel_location_scan = interpolate_face_attributes( self.pix_to_face, self.barycentric, self.face_location_attr_scan)
 		self.pixel_normal_scan   = interpolate_face_attributes( self.pix_to_face, self.barycentric, self.face_location_attr_scan_normal)
@@ -184,10 +237,65 @@ class Partial_views:
 		self.pcd.points = o3d.utility.Vector3dVector(depth_points)
 		
 	def show_3D_Partial_View(self):
+		''' 
+    		Show the 3D Partial View
+	    
+    		'''
 		o3d.visualization.draw_geometries([self.pcd])
+	
+	def save_3D_Partial_View(self,folder,filename):
+		''' 
+    		Show the 3D Partial View
+      		Args:
+			
+			folder (str) : folder name
+	 		filename(str): filename	    
+    		'''
+		name = folder + "/" + filename + ".ply"
+		o3d.io.write_point_cloud( name, self.pcd)
 
-### For simplicity, this method would run
-	def run(self,folder,filename):
+	### For simplicity, this method would set the camera parameter and produce the 2D image and 3D object.
+	def run(self,folder,filename,show2D=False,save2D=True,show3D=False,save3D=True):
+		''' 
+    		Set the camera parameter, compute the 2D depth map, produce the 2D image and 3D object.
+      		Args:
+			
+			folder (str) : folder name
+	 		filename(str): filename	   
+    			show2D=False(bool): decide whether to show the 2D depth map 
+       			save2D=True(bool): decide whether to save the 2D depth map 
+	  		show3D=True(bool): decide whether to show the 3D object
+     			save3D=True(bool): decide whether to save the 3D object
+    		'''
+		self.setCamera()
+		self.setDepth_map(H=self.H,W=self.W,R=self.R,T=self.T,K=self.K)
 		self.show_image(show=False, save=True,folder=folder,filename=filename)
 		self.recover3D()
+		if show3D: 
+			self.show_3D_Partial_View()
+		if save3D:
+			self.save_3D_Partial_View(folder,filename)
+
+	### This can update the camera parameter and produce the new 2D image and 3D object.
+	def updateRun(self,folder,filename,camera,show2D=False,save2D=True,show3D=False,save3D=True):
+		''' 
+    		Update the camera parameter, compute the 2D depth map, produce the 2D image and 3D object.
+      		Args:
+			
+			folder (str) : folder name
+	 		filename(str): filename
+    			camera(dict)
+    			show2D=False(bool): decide whether to show the 2D depth map 
+       			save2D=True(bool): decide whether to save the 2D depth map 
+	  		show3D=True(bool): decide whether to show the 3D object
+     			save3D=True(bool): decide whether to save the 3D object
+    		'''
 		
+		self.updateCamera(camera)
+		self.setDepth_map(H=self.H,W=self.W,R=self.R,T=self.T,K=self.K)
+		self.show_image(show=False, save=True,folder=folder,filename=filename)
+		self.recover3D()
+		if show3D: 
+			self.show_3D_Partial_View()
+		if save3D:
+			self.save_3D_Partial_View(folder,filename)
