@@ -42,7 +42,7 @@ if __name__ == '__main__':
 	
 	n_translation_smaple = 10
 
-	for i in range(0,min(n_sample,1),50):
+	for i in range(0,min(n_sample,500),50):
 		pose = d_poses[i].reshape(1,-1)
 		camera["R"] = np.array([90,0,90])
 		pv = Partial_views(pose_axisang=pose,betas=None,camera=camera)
