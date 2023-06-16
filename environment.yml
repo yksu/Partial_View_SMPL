@@ -1,31 +1,34 @@
 name: Partial_View
-
+channels:
+  - pytorch
+  - defaults
 dependencies:
-  - opencv-python
-  - python=python3.8
+  - numpy==1.23.1
+  - pandas
   - matplotlib
-  - numpy
-  - torch
-  - pip
-  - PyOpenGL=3.1.0
-  - PyOpenGL-accelerate=3.1.7
-  - pyrender=0.1.45
-  - trimesh
-  - chumpy
-  - open3d
-  - pytorch3d
+  - pip 
   - scipy
-  - smplpytorch                   
-  - smplx                         
   - sympy                        
   - tqdm
   - PyYAML
-  - transforms3d==0.3.1
-  - omegaconf
   - loguru
-  - dotmap
   - colour
-  - scipy
   - scikit-image
   - imageio
-  - moviepy
+  - python=3.8
+
+
+  - pip:
+    - opencv-python
+    - pyrender==0.1.45
+    - omegaconf
+    - chumpy
+    - smplx
+    - transforms3d==0.3.1
+    - dotmap
+    - pyopengl==3.1.0
+    - torch
+    - pyopengl-accelerate==3.1.7
+    - smplpytorch
+    - moviepy
+    - trimesh
