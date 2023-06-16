@@ -16,12 +16,12 @@ Set the environment:
    for a new smplpytorch environment
 
 Install the following packages: 
-
+  - open3d by pip install open3d
   - human body prior from https://github.com/nghorbani/human_body_prior
 
   - body_visualizer from https://github.com/nghorbani/body_visualizer
 
-
+  - pytorch3d from https://github.com/facebookresearch/pytorch3d
 ## Tutorial
 
 ### Partial view of a demo shape
