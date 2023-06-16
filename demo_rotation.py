@@ -40,7 +40,7 @@ if __name__ == '__main__':
 	except:
 		pass
 	
-	n_translation_smaple = 10
+	n_rotation_sample = 10
 
 	for i in range(0,min(n_sample,500),50):
 		pose = d_poses[i].reshape(1,-1)
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 			os.makedirs(folder+"/x")
 		except:
 			pass 
-		for j in range(n_translation_smaple):
+		for j in range(n_rotation_sample):
 			camera["R"] += r
 			pv.updateRun(folder+"/x",filename="image"+str(i+1) + "_x"+str(j+1),camera=camera,show2D=False,save2D=True,show3D=False,save3D=True)
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
 		except:
 			pass 
 
-		for j in range(n_translation_smaple):
+		for j in range(n_rotation_sample):
 			camera["R"] += r
 			pv.updateRun(folder+"/y",filename="image"+str(i+1)+ "_y"+str(j+1),camera=camera,show2D=False,save2D=True,show3D=False,save3D=True)
 
@@ -83,6 +83,6 @@ if __name__ == '__main__':
 		except:
 			pass 
 
-		for j in range(n_translation_smaple):
+		for j in range(n_rotation_sample):
 			camera["R"] += r
 			pv.updateRun(folder+"/z",filename="image"+str(i+1)+ "_z"+str(j+1),camera=camera,show2D=False,save2D=True,show3D=False,save3D=True)
