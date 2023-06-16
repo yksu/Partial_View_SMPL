@@ -34,7 +34,7 @@ if __name__ == '__main__':
 	n_sample = d_poses.shape[0]
 	
 	####### In the demo file, I save and show 3 images for illustration.
-	folder = "result"
+	folder = "translation"
 	try:
 		os.makedirs(folder)
 	except:
