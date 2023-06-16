@@ -27,13 +27,13 @@ from pytorch3d.renderer import MeshRasterizer
 
 def set_Camera_Rasterizer(H,W,R,T,K):
 	''' 
-    Set the the parameter of the camera
-    Args:
+    	Set the the parameter of the camera
+    	Args:
 		H (int) : image height
 		W (int) : image width
-    	R (np.array): (3,) array storing the rotation angle
-    	T (torch.Tensor): (3,) array storing the translation vector
-    	K (torch.Tensor): (4,) array storing the camaera calibration matrix
+    		R (np.array): (3,) array storing the rotation angle
+    		T (torch.Tensor): (3,) array storing the translation vector
+    		K (torch.Tensor): (4,) array storing the camaera calibration matrix
 	
 	returns:
 		cameras_front
