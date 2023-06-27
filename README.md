@@ -45,3 +45,9 @@ In the file **demo_rotation.py**,
 it is an illustration showing that the object rotating along the x-axis, y-axis and z-axis for 10 time steps and for 10 shapes respectively.
 
 So, for each rotating direction, we show 100 shapes.
+
+### Vertex faces mapping
+
+In the file file **demo_mapping.ipynb**, 
+
+it is an illustration showing that the vertex mapping and faces mapping.
