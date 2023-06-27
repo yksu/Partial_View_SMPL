@@ -50,4 +50,4 @@ So, for each rotating direction, we show 100 shapes.
 
 In the file file **demo_mapping.ipynb**, 
 
-it is an illustration showing that the vertex mapping and faces mapping.
+it is an illustration for vertex mapping method and faces mapping method.
