@@ -42,6 +42,6 @@ if __name__ == '__main__':
 			pose = p.reshape(1,-1)
 			pv.updateMesh(pose_axisang=pose)
 			pv.run(folder,"image"+str(i+1),show2D=False,save2D=False,show3D=False,save3D=False)
-			point_cloud.append(np.asarray(pv.pcd.points))
+			point_cloud.append(np.asarray(pv.pcd.points)[:10000,])
 
 	np.save("sample", np.asarray(point_cloud))
