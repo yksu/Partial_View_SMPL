@@ -48,6 +48,12 @@ So, for each rotating direction, we show 100 shapes.
 
 ### Vertex faces mapping
 
-In the file file **demo_mapping.ipynb**, 
+In the file **demo_mapping.ipynb**, 
 
 it is an illustration for vertex mapping method and faces mapping method.
+
+### Trainin the Auto-Encoder Model:
+
+In the notebook **demo_AE.ipynb**, 
+
+it is an illustration on how to train the auto-encoder model for point clouds.
