@@ -11,22 +11,20 @@ class Auto_Encoder(nn.Module):
 
         # Encoder
         self.Encoder = nn.Sequential(
-            nn.Linear(30000, 4096),
-            nn.ReLU(),
-            nn.Linear(4096, 256),
-            nn.ReLU(),
-            nn.Linear(256, 64),
-            nn.ReLU()
+            nn.Linear(30000, 8192),
+            nn.RReLU(),
+            nn.Linear(8192, 4096),
+            nn.RReLU(),
+            nn.Linear(4096, 1024)
         )
 
         # Decoder
         self.Decoder = nn.Sequential(
-            nn.Linear(64, 256),
-            nn.ReLU(),
-            nn.Linear(256, 4096),
-            nn.ReLU(),
-            nn.Linear(4096, 30000),
-            nn.Sigmoid()
+            nn.Linear(1024, 4096),
+            nn.RReLU(),
+            nn.Linear(4096, 8192),
+            nn.RReLU(),
+            nn.Linear(8192, 30000)
         )
 
     def forward(self, input):
