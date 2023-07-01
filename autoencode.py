@@ -15,7 +15,8 @@ class Auto_Encoder(nn.Module):
             nn.RReLU(),
             nn.Linear(8192, 4096),
             nn.RReLU(),
-            nn.Linear(4096, 1024)
+            nn.Linear(4096, 1024),
+            nn.Sigmoid()
         )
 
         # Decoder
@@ -24,7 +25,8 @@ class Auto_Encoder(nn.Module):
             nn.RReLU(),
             nn.Linear(4096, 8192),
             nn.RReLU(),
-            nn.Linear(8192, 30000)
+            nn.Linear(8192, 30000),
+            nn.Tanh()
         )
 
     def forward(self, input):
