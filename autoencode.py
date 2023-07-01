@@ -11,7 +11,7 @@ class Auto_Encoder(nn.Module):
 
         # Encoder
         self.Encoder = nn.Sequential(
-            nn.Linear(30000, 8192),
+            nn.Linear(45900, 8192),
             nn.RReLU(),
             nn.Linear(8192, 4096),
             nn.RReLU(),
@@ -25,7 +25,7 @@ class Auto_Encoder(nn.Module):
             nn.RReLU(),
             nn.Linear(4096, 8192),
             nn.RReLU(),
-            nn.Linear(8192, 30000),
+            nn.Linear(8192, 45900),
             nn.Tanh()
         )
 
